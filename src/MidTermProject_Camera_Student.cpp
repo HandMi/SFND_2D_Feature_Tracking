@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
+#include <numeric>
 #include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -19,7 +20,7 @@
 using namespace std;
 
 /* MAIN PROGRAM */
-int main(int argc, const char *argv[]) {
+int main(int argc, const char* argv[]) {
     /* INIT VARIABLES AND DATA STRUCTURES */
 
     // data location
@@ -39,6 +40,8 @@ int main(int argc, const char *argv[]) {
     bool bVis = false;                                 // visualize results
 
     /* MAIN LOOP OVER ALL IMAGES */
+
+    std::vector<int> number_of_keypoints;
 
     for (size_t imgIndex = 0; imgIndex <= imgEndIndex - imgStartIndex; imgIndex++) {
         /* LOAD IMAGE INTO BUFFER */
@@ -62,6 +65,7 @@ int main(int argc, const char *argv[]) {
         dataBuffer.push_back(frame);
 
         //// EOF STUDENT ASSIGNMENT
+        std::cout << "Image " << imgIndex << std::endl;
         cout << "#1 : LOAD IMAGE INTO BUFFER done" << endl;
 
         /* DETECT IMAGE KEYPOINTS */
@@ -91,8 +95,15 @@ int main(int argc, const char *argv[]) {
         bool bFocusOnVehicle = true;
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle) {
-            // ...
+            std::vector<cv::KeyPoint> selected_keypoints;
+            for (const auto& keypoint : keypoints) {
+                if (vehicleRect.contains(keypoint.pt)) {
+                    selected_keypoints.push_back(keypoint);
+                }
+            }
+            keypoints = selected_keypoints;
         }
+        number_of_keypoints.push_back(keypoints.size());
 
         //// EOF STUDENT ASSIGNMENT
 
@@ -165,13 +176,16 @@ int main(int argc, const char *argv[]) {
                 string windowName = "Matching keypoints between two camera images";
                 cv::namedWindow(windowName, 7);
                 cv::imshow(windowName, matchImg);
-                cout << "Press key to continue to next image" << endl;
+                cout << "Press key to continue to next image" << endl
+                     << endl;
                 cv::waitKey(0);  // wait for key to be pressed
             }
             bVis = false;
         }
 
     }  // eof loop over all images
+    std::cout << "Average number of detected keypoints: " << std::accumulate(number_of_keypoints.begin(), number_of_keypoints.end(), 0) / number_of_keypoints.size()
+              << std::endl;
 
     return 0;
 }
