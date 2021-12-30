@@ -173,7 +173,7 @@ The main takeway here is that the HARRIS detector only finds very crude keypoint
 improve this by much. BRISK, AKAZE and SIFT have the most notable detection clusters on the edges of the car.
 
 
-## Task 7: Performance Evaluation Keypoint Matching
+## Task 8: Performance Evaluation Keypoint Matching
 
 Number of matched keypoints for all detector/descriptor pairs with KNN matching and brute force selection:
 
@@ -188,7 +188,7 @@ Number of matched keypoints for all detector/descriptor pairs with KNN matching 
 | SIFT                     |  65           |   78          |  out of memory|   66          |  FAILED       |   88          |
 
 
-## Task 8: Performance Evaluation Timing
+## Task 9: Performance Evaluation Timing
 
 Time for keypoint detection and descriptor extraction per image in ms:
 
